@@ -8,7 +8,7 @@ import {
 } from "../blockchain/functions/lottery";
 import Countdown from "react-countdown";
 
-export default function Lotto({ userAddress, walletType }) {
+export default function Lotto({ userAddress, walletType, setSmShow }) {
   const [list, setList] = useState([
     { title: "EFlotto", selected: true, icon: graphLogo, id: 0 },
     { title: "EFlotto", selected: false, icon: graphLogo, id: 1 },
@@ -127,7 +127,7 @@ export default function Lotto({ userAddress, walletType }) {
             lottoDetails.ticketPrice * tickets > userDetails.balance ||
             isLoading
           }
-          onClick={handleEnter}
+          onClick={userAddress ? handleEnter : () => setSmShow(true)}
           className="lotto__button button"
         >
           Buy Tickets

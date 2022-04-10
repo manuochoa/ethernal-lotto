@@ -267,7 +267,11 @@ const Home = (props) => {
             "sections__item " + (view === 3 ? "active-tab" : "inactive-tab")
           }
         >
-          <Lotto userAddress={userAddress} walletType={walletType} />
+          <Lotto
+            setSmShow={setSmShow}
+            userAddress={userAddress}
+            walletType={walletType}
+          />
         </div>
         <div
           className={
