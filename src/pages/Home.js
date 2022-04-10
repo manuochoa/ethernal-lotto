@@ -4,7 +4,7 @@ import {
   fetchContractData,
   fetchUserData,
   // setAutoPayout,
-  claimRewards
+  claimRewards,
 } from "../blockchain/functions";
 import Header from "../components/Header";
 import Rewards from "../components/Rewards";
@@ -36,7 +36,7 @@ const Home = (props) => {
     holdersPot: "",
     rewardCycle: "",
     nextBuyBack: "",
-    tokens: []
+    tokens: [],
   });
   const [userData, setUserData] = useState({
     BNBremaining: "",
@@ -44,7 +44,7 @@ const Home = (props) => {
     ShowMyRewardTOKENS: [],
     userTokens: [],
     autoPayOutActive: false,
-    userBalance: null
+    userBalance: null,
   });
 
   const changeView = (id) => {
@@ -54,7 +54,7 @@ const Home = (props) => {
   const setUserTokens = (newTokens) => {
     setUserData({
       ...userData,
-      userTokens: newTokens
+      userTokens: newTokens,
     });
   };
 
@@ -89,23 +89,25 @@ const Home = (props) => {
   const connectMetamask = async () => {
     try {
       const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts"
+        method: "eth_requestAccounts",
       });
       setUserAddress(accounts[0]);
       setWalletType("Metamask");
       getUserData();
       setSmShow(false);
 
+      window.localStorage.setItem("userAddress", accounts[0]);
+
       const chainId = await window.ethereum.request({
-        method: "eth_chainId"
+        method: "eth_chainId",
       });
 
-      if (chainId !== "0x38") {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x38" }]
-        });
-      }
+      // if (chainId !== "0x38") {
+      //   await window.ethereum.request({
+      //     method: "wallet_switchEthereumChain",
+      //     params: [{ chainId: "0x38" }],
+      //   });
+      // }
 
       window.ethereum.on("accountsChanged", function (accounts) {
         setUserAddress(accounts[0]);
@@ -123,11 +125,11 @@ const Home = (props) => {
     try {
       const provider = new WalletConnectProvider({
         rpc: {
-          56: "https://bsc-dataseed.binance.org/"
+          56: "https://bsc-dataseed.binance.org/",
         },
         network: "binance",
         chainId: 56,
-        infuraId: null
+        infuraId: null,
       });
 
       await provider.enable();
@@ -149,9 +151,9 @@ const Home = (props) => {
   const disconnectWalletConnect = async () => {
     const provider = new WalletConnectProvider({
       rpc: {
-        56: "wss://bsc-dataseed.binance.org/"
+        56: "wss://bsc-dataseed.binance.org/",
       },
-      network: "binance"
+      network: "binance",
     });
     await provider.disconnect();
   };
@@ -189,8 +191,8 @@ const Home = (props) => {
           {
             name: contractData.availableTokens[index]?.label,
             value: Number(el),
-            fill: contractData.availableTokens[index]?.color
-          }
+            fill: contractData.availableTokens[index]?.color,
+          },
         ];
       } else if (el !== "0") {
         let index = data.ShowMyRewardTOKENS[i];
@@ -198,7 +200,7 @@ const Home = (props) => {
         selected.push({
           name: contractData.availableTokens[index]?.label,
           value: Number(el),
-          fill: contractData.availableTokens[index]?.color
+          fill: contractData.availableTokens[index]?.color,
         });
       }
     });
@@ -210,6 +212,10 @@ const Home = (props) => {
   };
 
   useEffect(() => {
+    let user = window.localStorage.getItem("userAddress");
+    if (user) {
+      connectMetamask();
+    }
     getContractData();
     getUserData();
   }, []);
@@ -220,7 +226,7 @@ const Home = (props) => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: "instant"
+      behavior: "instant",
     });
   }, [view]);
 
@@ -237,8 +243,7 @@ const Home = (props) => {
       <div className="sections">
         <div
           className={
-            "sections__item " +
-            (view === 1 ? "active-tab" : "inactive-tab")
+            "sections__item " + (view === 1 ? "active-tab" : "inactive-tab")
           }
         >
           <Rewards
@@ -262,10 +267,12 @@ const Home = (props) => {
             "sections__item " + (view === 3 ? "active-tab" : "inactive-tab")
           }
         >
-          <Lotto />
+          <Lotto userAddress={userAddress} walletType={walletType} />
         </div>
         <div
-          className={"sections__item " + (view === 2 ? "active-tab" : "inactive-tab")}
+          className={
+            "sections__item " + (view === 2 ? "active-tab" : "inactive-tab")
+          }
         >
           <Exchangep
             connectWallet={connectWallet}
