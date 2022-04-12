@@ -93,11 +93,20 @@ export default function Lotto({ userAddress, walletType, setSmShow }) {
                 Your Tickets: <strong>{userDetails.myEntries}</strong>
               </span>
             </div>
-            <input
+            {/* <input
               value={tickets}
               onChange={(e) => setTickets(e.target.value)}
               type="number"
-            />
+            /> */}
+            <div className="exchange-input">
+              <input
+                type="number"
+                className="form-control"
+                value={tickets}
+                onChange={(e) => setTickets(e.target.value)}
+                onWheel={(e) => e.target.blur()}
+              />
+            </div>
           </div>
           <div className="lotto__column">
             <div className="lotto__row">
