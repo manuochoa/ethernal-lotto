@@ -53,7 +53,7 @@ export default function Lotto({ userAddress, walletType, setSmShow }) {
   const getNumbers = async () => {
     let result = await getLottoNumbers();
     if (result) {
-      setLottoDetails(result);
+      setLottoDetails({...result});
     }
   };
 
@@ -61,7 +61,7 @@ export default function Lotto({ userAddress, walletType, setSmShow }) {
     if (userAddress) {
       let result = await getUserValues(userAddress);
       if (result) {
-        setUserDetails(result);
+        setUserDetails({...result});
       }
     }
   };
